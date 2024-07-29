@@ -5,8 +5,12 @@ $(document).ready(function() {
             type: "GET",
             data: { status: status },
             success: function(response) {
-                if (response.orders) {
+                console.log("API Response:", response);  // Log the response
+                if (response.orders && response.orders.length > 0) {
                     renderOrders(response.orders, status);
+                } else {
+                    console.log("No orders found in the response.");
+                    renderNoOrdersFound(status);
                 }
             },
             error: function(xhr) {
@@ -24,6 +28,7 @@ $(document).ready(function() {
             if (status === 'all' || order.status === status) {
                 ordersExist = true;
                 const orderSection = (status === 'all') ? $('#order-section-all .orders') : $(`#order-section-${order.status} .orders`);
+                console.log("Rendering order:", order);  // Log each order being rendered
                 orderSection.append(`
                     <div class="order-card" data-order-id="${order.id}">
                         <div class="product-image">
@@ -44,11 +49,17 @@ $(document).ready(function() {
         });
 
         if (!ordersExist) {
-            $(sectionSelector).append('<p class="no-orders">No orders found for this status.</p>');
+            renderNoOrdersFound(status);
         }
 
         $('.order-section').hide();
         $('#order-section-' + status).show();
+    }
+
+    function renderNoOrdersFound(status) {
+        const sectionSelector = (status === 'all') ? '#order-section-all .orders' : `#order-section-${status} .orders`;
+        $(sectionSelector).empty();
+        $(sectionSelector).append('<p class="no-orders">No orders found for this status.</p>');
     }
 
     function capitalizeFirstLetter(string) {

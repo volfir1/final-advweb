@@ -26,48 +26,36 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
         $customer = $user->customer;
-
+    
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'fname' => 'required|string|max:255',
-            'lname' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $user->id,
+            'fname' => 'nullable|string|max:255',
+            'lname' => 'nullable|string|max:255',
+            'contact' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
         ]);
-
+    
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
-
+    
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => $request->name ?: $user->name,
+            'email' => $request->email ?: $user->email,
         ]);
-
+    
         $customer->update([
-            'fname' => $request->fname,
-            'lname' => $request->lname,
-            'contact' => $request->contact,
-            'address' => $request->address,
+            'fname' => $request->fname ?: $customer->fname,
+            'lname' => $request->lname ?: $customer->lname,
+            'contact' => $request->contact ?: $customer->contact,
+            'address' => $request->address ?: $customer->address,
         ]);
-
-        return response()->json(['message' => 'Profile updated successfully']);
+    
+        return redirect()->back()->with('success', 'Profile updated successfully');
     }
+    
 
-    public function deactivate(Request $request)
-    {
-        $user = Auth::user();
-        $user->update(['active' => false]);
-
-        return response()->json(['message' => 'Account deactivated successfully']);
-    }
-
-    public function destroy(Request $request)
-    {
-        $user = Auth::user();
-        $user->delete();
-
-        return response()->json(['message' => 'Account deleted successfully']);
-    }
 }

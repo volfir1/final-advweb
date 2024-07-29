@@ -1,6 +1,24 @@
 $(document).ready(function() {
     console.log('Courier Page is ready');
 
+    var existingCourierNames = [];
+
+    // Fetch existing courier names
+    $.ajax({
+        url: "/api/admin/couriers/list",
+        type: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            existingCourierNames = data.data.map(courier => ({ id: courier.id, name: courier.courier_name.toLowerCase() }));
+            console.log('Existing courier names:', existingCourierNames);
+        },
+        error: function(xhr) {
+            console.error("Error in fetching courier names: ", xhr.responseText);
+        }
+    });
+
     var courierTable = $('#courier_table').DataTable({
         processing: true,
         serverSide: true,
@@ -206,11 +224,19 @@ $(document).ready(function() {
         let isValid = true;
         $('.text-danger').text('');
 
-        if ($('#courier_name').val().trim() === '') {
+        const courierName = $('#courier_name').val().trim().toLowerCase();
+        const branch = $('#branch').val().trim();
+        const hiddenId = $('#hidden_id_courier').val();
+
+        if (!courierName) {
             $('#courier_name_error').text('Name is required');
             isValid = false;
+        } else if (existingCourierNames.some(courier => courier.name === courierName && courier.id != hiddenId)) {
+            $('#courier_name_error').text('Courier name already exists.');
+            isValid = false;
         }
-        if ($('#branch').val().trim() === '') {
+
+        if (!branch) {
             $('#branch_error').text('Branch is required');
             isValid = false;
         }

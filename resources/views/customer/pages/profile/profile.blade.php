@@ -27,28 +27,28 @@
             @csrf
             <div id="error-messages" class="alert alert-danger" style="display:none;"></div>
             <div class="form-group">
-                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="{{ Auth::user()->customer->fname }}">
-                <span class="danger-text" id="error-fname"></span>
+                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="{{ old('fname', Auth::user()->customer->fname) }}">
+                <span class="danger-text text-danger" id="error-fname">{{ $errors->first('fname') }}</span>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" value="{{ Auth::user()->customer->lname }}" required>
-                <span class="danger-text" id="error-lname"></span>
+                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" value="{{ old('lname', Auth::user()->customer->lname) }}">
+                <span class="danger-text text-danger" id="error-lname">{{ $errors->first('lname') }}</span>
             </div>
             <div class="form-group">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ Auth::user()->email }}" required>
-                <span class="danger-text" id="error-email"></span>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email', Auth::user()->email) }}">
+                <span class="danger-text text-danger" id="error-email">{{ $errors->first('email') }}</span>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact" value="{{ Auth::user()->customer->contact }}" required>
-                <span class="danger-text" id="error-contact"></span>
+                <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact" value="{{ old('contact', Auth::user()->customer->contact) }}">
+                <span class="danger-text text-danger" id="error-contact">{{ $errors->first('contact') }}</span>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ Auth::user()->customer->address }}" required>
-                <span class="danger-text" id="error-address"></span>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ old('address', Auth::user()->customer->address) }}">
+                <span class="danger-text text-danger" id="error-address">{{ $errors->first('address') }}</span>
             </div>
             <div class="form-group">
                 <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
-                <span class="danger-text" id="error-profile_image"></span>
+                <span class="danger-text text-danger" id="error-profile_image">{{ $errors->first('profile_image') }}</span>
             </div>
         </form>
     </div>
@@ -74,57 +74,42 @@ $(document).ready(function() {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const contactPattern = /^\d{11}$/;
 
-        if (!$('#fname').val().trim()) {
+        const fname = $('#fname').val().trim();
+        const lname = $('#lname').val().trim();
+        const email = $('#email').val().trim();
+        const contact = $('#contact').val().trim();
+        const address = $('#address').val().trim();
+
+        if (fname && !namePattern.test(fname)) {
             valid = false;
-            errorMessages.append('<p>First name is required.</p>');
-            $('#error-fname').text('First name is required.');
-        } else if (!namePattern.test($('#fname').val().trim())) {
-            valid = false;
-            errorMessages.append('<p>First name can only contain letters.</p>');
             $('#error-fname').text('First name can only contain letters.');
         } else {
             $('#error-fname').text('');
         }
 
-        if (!$('#lname').val().trim()) {
+        if (lname && !namePattern.test(lname)) {
             valid = false;
-            errorMessages.append('<p>Last name is required.</p>');
-            $('#error-lname').text('Last name is required.');
-        } else if (!namePattern.test($('#lname').val().trim())) {
-            valid = false;
-            errorMessages.append('<p>Last name can only contain letters.</p>');
             $('#error-lname').text('Last name can only contain letters.');
         } else {
             $('#error-lname').text('');
         }
 
-        if (!$('#email').val().trim()) {
+        if (email && !emailPattern.test(email)) {
             valid = false;
-            errorMessages.append('<p>Email is required.</p>');
-            $('#error-email').text('Email is required.');
-        } else if (!emailPattern.test($('#email').val().trim())) {
-            valid = false;
-            errorMessages.append('<p>Please enter a valid email address.</p>');
             $('#error-email').text('Please enter a valid email address.');
         } else {
             $('#error-email').text('');
         }
 
-        if (!$('#contact').val().trim()) {
+        if (contact && !contactPattern.test(contact)) {
             valid = false;
-            errorMessages.append('<p>Contact is required.</p>');
-            $('#error-contact').text('Contact is required.');
-        } else if (!contactPattern.test($('#contact').val().trim())) {
-            valid = false;
-            errorMessages.append('<p>Contact must be exactly 11 digits.</p>');
             $('#error-contact').text('Contact must be exactly 11 digits.');
         } else {
             $('#error-contact').text('');
         }
 
-        if (!$('#address').val().trim()) {
+        if (!address) {
             valid = false;
-            errorMessages.append('<p>Address is required.</p>');
             $('#error-address').text('Address is required.');
         } else {
             $('#error-address').text('');
@@ -148,11 +133,9 @@ $(document).ready(function() {
                     const errors = xhr.responseJSON.errors;
                     for (let key in errors) {
                         if (errors.hasOwnProperty(key)) {
-                            errorMessages.append('<p>' + errors[key][0] + '</p>');
                             $('#error-' + key).text(errors[key][0]);
                         }
                     }
-                    errorMessages.show();
                 }
             });
         } else {

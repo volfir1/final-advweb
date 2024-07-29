@@ -1,58 +1,55 @@
 $(document).ready(function() {
-    function fetchOrders(status) {
+    function fetchReviews() {
         $.ajax({
-            url: "/api/customer/orders/history",
+            url: "/api/customer/reviews/fetch-completed-orders",
             type: "GET",
-            data: { status: status },
             success: function(response) {
-                if (response.orders) {
-                    renderOrders(response.orders, status);
+                console.log("API Response:", response);  // Log the response
+                if (response.reviewed && response.not_reviewed) {
+                    renderReviews(response.not_reviewed, 'not_reviewed');
+                    renderReviews(response.reviewed, 'reviewed');
+                } else {
+                    renderNoReviewsFound('not_reviewed');
+                    renderNoReviewsFound('reviewed');
                 }
             },
             error: function(xhr) {
-                console.error("Error fetching orders:", xhr.responseText);
+                console.error("Error fetching reviews:", xhr.responseText);
             }
         });
     }
 
-    function renderOrders(orders, status) {
-        const sectionSelector = (status === 'all') ? '#order-section-all .orders' : `#order-section-${status} .orders`;
+    function renderReviews(orders, status) {
+        const sectionSelector = `#review-section-${status} .reviews`;
         $(sectionSelector).empty();
-        let ordersExist = false;
-
-        orders.forEach(order => {
-            if (status === 'all' || order.status === status) {
-                ordersExist = true;
-                const orderSection = (status === 'all') ? $('#order-section-all .orders') : $(`#order-section-${order.status} .orders`);
-                orderSection.append(`
-                    <div class="order-card" data-order-id="${order.id}">
-                        <div class="product-image">
-                            <img src="${order.products[0].image_url}" alt="${order.products[0].name}">
+        if (orders.length > 0) {
+            orders.forEach(order => {
+                order.products.forEach(product => {
+                    $(sectionSelector).append(`
+                        <div class="review-card" data-order-id="${order.id}">
+                            <div class="product-image">
+                                <img src="${product.image_url}" alt="${product.name}">
+                            </div>
+                            <div class="review-info">
+                                <h4>Product: ${product.name}</h4>
+                                <p>${product.description}</p>
+                                ${status === 'not_reviewed' ? 
+                                    `<button class="review-button" data-toggle="modal" data-target="#reviewModal" data-product-id="${product.id}" data-order-id="${order.id}">Add Review</button>` : 
+                                    '<span class="reviewed-tag">Reviewed</span>'}
+                            </div>
                         </div>
-                        <div class="order-info">
-                            <h4>Order #${order.id}</h4>
-                            <div class="order-status-display">${capitalizeFirstLetter(order.status)}</div>
-                            ${order.products.map(product => `
-                                <p>${product.name} - Quantity: ${product.pivot.quantity}</p>
-                            `).join('')}
-                            <p>Total Price: ₱${order.products.reduce((sum, product) => sum + product.price * product.pivot.quantity, 0).toFixed(2)}</p>
-                            ${order.status === 'completed' ? '<button class="review-button">Review</button>' : ''}
-                        </div>
-                    </div>
-                `);
-            }
-        });
-
-        if (!ordersExist) {
-            $(sectionSelector).append('<p class="no-orders">No orders found for this status.</p>');
+                    `);
+                });
+            });
+        } else {
+            renderNoReviewsFound(status);
         }
-
-        $('.order-section').hide();
-        $('#order-section-' + status).show();
     }
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+    function renderNoReviewsFound(status) {
+        const sectionSelector = `#review-section-${status} .reviews`;
+        $(sectionSelector).empty();
+        $(sectionSelector).append('<p class="no-reviews">No reviews found for this status.</p>');
     }
 
     $('.tab').click(function() {
@@ -60,20 +57,47 @@ $(document).ready(function() {
         $(this).addClass('active');
 
         var status = $(this).data('status');
-        fetchOrders(status);
+        $(".review-section").hide();
+        $(`#review-section-${status}`).show();
     });
 
-    // Initially show the 'All' tab
-    $('.tab[data-status="all"]').addClass('active');
-    fetchOrders('all');
+    // Initially show the 'Not Reviewed' tab
+    $('.tab[data-status="not_reviewed"]').addClass('active');
+    $("#review-section-reviewed").hide();
+    fetchReviews();
 
-    $(document).on('mouseenter', '.order-card', function() {
-        $(this).addClass('hover');  
-    }).on('mouseleave', '.order-card', function() {
-        $(this).removeClass('hover');
+    $('#reviewModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var productId = button.data('product-id');
+        var orderId = button.data('order-id');
+        
+        var modal = $(this);
+        modal.find('#product_id').val(productId);
+        modal.find('#order_id').val(orderId);
+        modal.find('#customer_id').val($('#customer_id').val());
     });
 
-    $(document).on('click', '.review-button', function() {
-        alert('Review functionality to be implemented');
+    $('#reviewForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: '/api/customer/reviews',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#reviewModal').modal('hide');
+                alert('Review submitted successfully!');
+                // Refresh reviews
+                fetchReviews();
+            },
+            error: function(xhr) {
+                console.error("Error submitting review:", xhr.responseText);        
+                alert('Error submitting review.');
+            }
+        });
     });
 });

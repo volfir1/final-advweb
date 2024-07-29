@@ -160,11 +160,13 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::delete('/removeFromCart/{id}', [ShopController::class, 'removeFromCart'])->name('api.customer.removeFromCart');
         Route::post('/addToCart', [ShopController::class, 'addToCart'])->name('api.addToCart');
         Route::post('/checkout',[ShopController::class, 'checkout']);
+        Route::get('/reviews/form/{orderId}', [ReviewController::class, 'showReviewForm'])->name('reviews.form');
+        Route::get('/customer/reviews/fetch-completed-orders', [ReviewController::class, 'fetchCompletedOrdersForReview']);
         // Review routes
-        Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history');
+        Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history')->name('api.fetchComplete');
         Route::post(('customer/reviews/store'), [ReviewController::class, 'store'])->name('api.customer.reviews.store');
         Route::get('/customer/products/with-stock', [ProductController::class, 'getProductsWithStock'])->name('api.customer.getProductsWithStock');
-    });
+    }); 
 
 
     Route::get('/test-with-stock', [ProductController::class, 'getProductsWithStock']);

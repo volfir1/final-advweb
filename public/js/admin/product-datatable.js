@@ -184,7 +184,7 @@ $(document).ready(function() {
                 productDataTable.ajax.reload();
                 showNotification($('#hidden_id').val() ? 'Product updated successfully.' : 'Product created successfully.', 'success');
                 if (!$('#hidden_id').val()) {
-                    existingProductNames.push({ id: data.id, name: name });  // Add new product name to the array
+                    existingProductNames.push({ id: data.id, name: $('#name').val().trim().toLowerCase() });  // Add new product name to the array
                 }
             },
             error: function(xhr) {

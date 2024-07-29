@@ -83,6 +83,7 @@
     <script src="{{ asset('js/admin/stock-datatable.js') }}"></script>
     <script src="{{ asset('js/admin/supplier-datatable.js') }}"></script>
     <script src="{{ asset('js/customer/profile.js') }}"></script>
+    <script src="{{ asset('js/customer/order-history.js') }}"></script>
     <script src="{{ asset('js/SidebarData.js') }}"></script>
     <script src="{{ asset('js/admin/admin-sidebar.js') }}"></script>
     <script src="{{ asset('js/admin/payment-method-table.js') }}"></script>

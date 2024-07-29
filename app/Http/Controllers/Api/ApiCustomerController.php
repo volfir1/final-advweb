@@ -6,24 +6,38 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ApiCustomerController extends Controller
 {
     /**
      * Fetch order history for the authenticated customer.
-     */public function history(Request $request)
-{
-    try {
-        $user = Auth::user();
-        $orders = Order::with(['products'])->where('customer_id', $user->id)->get();
+     */
+    public function history(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            Log::info('Fetching orders for user: ' . $user->id);
 
-        return response()->json(['orders' => $orders]);
-    } catch (\Exception $e) {
-        \Log::error('Error in ApiCustomerController@history: ' . $e->getMessage());
-        return response()->json(['error' => 'An error occurred while fetching your orders.'], 500);
+            $status = $request->input('status', 'all');
+            
+            $ordersQuery = Order::with(['products'])
+                ->where('customer_id', $user->id);
+            
+            if ($status !== 'all') {
+                $ordersQuery->where('status', $status);
+            }
+            
+            $orders = $ordersQuery->get();
+
+            Log::info('Orders retrieved: ' . $orders->count());
+
+            return response()->json(['orders' => $orders]);
+        } catch (\Exception $e) {
+            Log::error('Error in ApiCustomerController@history: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while fetching your orders.'], 500);
+        }
     }
-}
-
     
 
     public function updateOrderStatus(Request $request)
@@ -39,6 +53,7 @@ class ApiCustomerController extends Controller
             return response()->json(['error' => 'An error occurred while updating the order status.'], 500);
         }
     }
+
 
     /**
      * Update the status of an order.

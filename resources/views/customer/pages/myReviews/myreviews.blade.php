@@ -39,8 +39,7 @@
                         <input type="hidden" id="customer_id" name="customer_id">
                         <div class="form-group">
                             <label for="rate">Rate</label>
-                            <input type="number" class="form-control" id="rate" name="rate" min="1"
-                                max="5" required>
+                            <input type="number" class="form-control" id="rate" name="rate" min="1" max="5" required>
                         </div>
                         <div class="form-group">
                             <label for="comment">Comment</label>
@@ -48,8 +47,7 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*"
-                                required>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
                         </div>
                     </form>
                 </div>
@@ -60,3 +58,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/my-reviews.js') }}"></script>
+@endpush
