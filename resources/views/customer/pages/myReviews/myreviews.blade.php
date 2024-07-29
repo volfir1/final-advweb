@@ -6,10 +6,12 @@
 
         <div class="review-status-tabs">
             <div class="tab active" data-status="not_reviewed">Not Reviewed</div>
-            <div class="tab" data-status="reviewed">Reviewed</div>
+           
         </div>
 
-        <div class="review-status-sections">
+        
+    </div>
+    <div class="review-status-sections">
             @foreach (['not_reviewed', 'reviewed'] as $status)
                 <div class="review-section" id="review-section-{{ $status }}">
                     <div class="reviews">
@@ -18,7 +20,6 @@
                 </div>
             @endforeach
         </div>
-    </div>
 
     <!-- Review Modal -->
     <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"

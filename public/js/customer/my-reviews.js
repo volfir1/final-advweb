@@ -32,9 +32,8 @@ $(document).ready(function() {
             let reviewsExist = false;
             reviews.forEach(review => {
                 if (review.status === status) {
-                    reviewsExist = true;
-                    reviewSection.append(`
-                        <div class="review-card" data-review-id="${review.id}">
+                           reviewSection.append(
+                        `<div class="review-card" data-review-id="${review.id}">
                             <div class="product-image">
                                 <img src="${review.product[0].image_url}" alt="${review.product[0].name}">
                             </div>
@@ -45,18 +44,17 @@ $(document).ready(function() {
                                     `<button class="review-button" data-order-id="${review.id}" data-product-id="${review.product[0].id}">Submit Review</button>`
                                  : ''}
                             </div>
-                        </div>
-                    `);
+                        </div>`
+                    );
                 }
             });
             if (!reviewsExist) {
-                reviewSection.append('<p class="no-reviews">No reviews found for this status.</p>');
+                reviewSection.append(`<p class="no-reviews">No reviews found for this status.</p>`);
             }
         });
-    
+
         // Attach review button click handler
         $('.review-button').on('click', function() {
-            console.log("napindot pre")
             const orderId = $(this).data('order-id');
             const productId = $(this).data('product-id');
             $('#reviewForm input[name="order_id"]').val(orderId);
@@ -64,8 +62,6 @@ $(document).ready(function() {
             $('#reviewModal').modal('show');
         });
     }
-        
-    
 
     $('#reviewForm').on('submit', function(e) {
         e.preventDefault();
