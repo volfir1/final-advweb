@@ -21,7 +21,7 @@
                             </form>
                         </div>
                     </div>
-                    <button type="button" id="create_courier" class="btn btn-primary btn-sm">Create Product</button>
+                    <button type="button" id="create_product" class="btn btn-primary btn-sm">Create Product</button>
                 </div>
             </div>
         </div>

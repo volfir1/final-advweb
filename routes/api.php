@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
-
+use App\Http\Controllers\Api\AdminChartsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -140,9 +140,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
      // Chart Routes
 
 
-        Route::get('/charts/total-supplier', [SupplierController::class, 'getTotalSuppliers']);
+        Route::get('/charts/total-supplier', [AdminChartsController::class, 'getTotalSuppliers'])->name('charts.GetTotalSupplier');
           Route::get('/charts/get-courier-per-branch', [CourierController::class, 'getCourierPerBranch'])->name('charts.GetcourierPerBranch');
-          Route::get('/charts/total-role', [UserManagementController::class, 'getTotalRoles']);
+          Route::get('/charts/total-role', [UserManagementController::class, 'getTotalRoles'])->name('');
     });
 
 
@@ -172,7 +172,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history')->name('api.fetchComplete');
         Route::post(('customer/reviews/store'), [ReviewController::class, 'store'])->name('api.customer.reviews.store');
         Route::get('/customer/products/with-stock', [ProductController::class, 'getProductsWithStock'])->name('api.customer.getProductsWithStock');
-    }); 
+    });
 
 
     Route::get('/test-with-stock', [ProductController::class, 'getProductsWithStock']);

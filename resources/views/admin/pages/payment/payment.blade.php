@@ -21,7 +21,7 @@
                             </form>
                         </div>
                     </div>
-                    <button type="button" id="create_courier" class="btn btn-primary btn-sm">Create Payment Method</button>
+                    <button type="button" id="create_payment_method" class="btn btn-primary btn-sm">Create Payment Method</button>
                 </div>
             </div>
         </div>

@@ -21,7 +21,7 @@
                             </form>
                         </div>
                     </div>
-                    <button type="button" id="create_courier" class="btn btn-primary btn-sm">Create Supplier</button>
+                    <button type="button" id="create_supplier" class="btn btn-primary btn-sm">Create Supplier</button>
                 </div>
             </div>
         </div>
