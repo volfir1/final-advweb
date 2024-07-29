@@ -18,6 +18,10 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Api\AdminChartsController;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -135,22 +139,18 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::delete('/{id}', [OrderController::class, 'destroy'])->name('api.admin.deleteOrder');
     });
 
-
-
      // Chart Routes
+<<<<<<< Updated upstream
 
 
         Route::get('/charts/total-supplier', [AdminChartsController::class, 'getTotalSuppliers'])->name('charts.GetTotalSupplier');
+=======
+        Route::get('/charts/total-supplier', [AdminChartsController::class, 'getTotalSuppliers']);
+>>>>>>> Stashed changes
           Route::get('/charts/get-courier-per-branch', [CourierController::class, 'getCourierPerBranch'])->name('charts.GetcourierPerBranch');
           Route::get('/charts/total-role', [UserManagementController::class, 'getTotalRoles'])->name('');
     });
 
-
-
-
-// Chart Routes
-//Route::get('/charts/customer-per-address', [ChartController::class, 'customerPerAddress'])->name('api.charts.customerPerAddress');
-//Route::get('/charts/totalSupplier', [ChartController::class, 'totalSupplier'])->name('api.charts.totalSupplier');
 
     Route::group(['middleware' => ['auth:sanctum', 'is_customer']], function () {
         Route::get('/profile', [UserProfileController::class, 'show'])->name('api.customer.profile.show');
@@ -166,8 +166,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::delete('/removeFromCart/{id}', [ShopController::class, 'removeFromCart'])->name('api.customer.removeFromCart');
         Route::post('/addToCart', [ShopController::class, 'addToCart'])->name('api.addToCart');
         Route::post('/checkout',[ShopController::class, 'checkout']);
-        Route::get('/reviews/form/{orderId}', [ReviewController::class, 'showReviewForm'])->name('reviews.form');
-        Route::get('/customer/reviews/fetch-completed-orders', [ReviewController::class, 'fetchCompletedOrdersForReview']);
+       
         // Review routes
         Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history');
         Route::post(('customer/reviews/store'), [ReviewController::class, 'store'])->name('api.customer.reviews.store');

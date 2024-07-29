@@ -52,7 +52,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" form="reviewForm">Submit Review</button>
+                    <button type="submit" class="btn btn-primary" form="reviewForm">Submit</button>
                 </div>
             </div>
         </div>

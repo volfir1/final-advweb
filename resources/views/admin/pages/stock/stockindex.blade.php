@@ -12,7 +12,7 @@
                     <p class="card-text">Manage your stock with ease.</p>
                 </div>
                 <div class="d-flex align-items-center">
-                    <div class="card me-3">
+                    <!-- <div class="card me-3">
                         <div class="card-body">
                             <form method="POST" enctype="multipart/form-data" action="{{ route('imports.stock') }}" class="d-flex align-items-center">
                                 @csrf
@@ -20,8 +20,13 @@
                                 <button id="import-form-submit" type="submit" class="btn btn-primary">Import Excel File</button>
                             </form>
                         </div>
+<<<<<<< Updated upstream
                     </div>
                     <button type="button" id="create_stock" class="btn btn-primary btn-sm">Create Stock</button>
+=======
+                    </div> -->
+                    <button type="button" id="create_courier" class="btn btn-primary btn-sm">Create Stock</button>
+>>>>>>> Stashed changes
                 </div>
             </div>
         </div>

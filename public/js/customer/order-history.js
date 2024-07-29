@@ -37,7 +37,6 @@ $(document).ready(function() {
                                     <p>${product.name} - Quantity: ${product.pivot.quantity}</p>
                                 `).join('')}
                                 <p>Total Price: ₱${order.products.reduce((sum, product) => sum + product.price * product.pivot.quantity, 0).toFixed(2)}</p>
-                                ${order.status === 'completed' ? '<button class="review-button">Review</button>' : ''}
                             </div>
                         </div>
                     `);

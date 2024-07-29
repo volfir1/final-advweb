@@ -12,7 +12,7 @@
                         <p class="card-text">Manage your orders with ease.</p>
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="card me-3">
+                        <!-- <div class="card me-3">
                             <div class="card-body">
                                 <form method="POST" enctype="multipart/form-data" action="{{ route('imports.order') }}" class="d-flex align-items-center">
                                     @csrf
@@ -20,7 +20,7 @@
                                     <button id="import-form-submit" type="submit" class="btn btn-primary">Import Excel File</button>
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                         <button type="button" id="create_courier" class="btn btn-primary btn-sm">Create Order</button>
                     </div>
                 </div>
