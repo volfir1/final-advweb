@@ -169,8 +169,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/reviews/form/{orderId}', [ReviewController::class, 'showReviewForm'])->name('reviews.form');
         Route::get('/customer/reviews/fetch-completed-orders', [ReviewController::class, 'fetchCompletedOrdersForReview']);
         // Review routes
-        Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history')->name('api.fetchComplete');
+        Route::get('/customer/reviews/history', [ReviewController::class, 'history'])->name('api.customer.reviews.history');
         Route::post(('customer/reviews/store'), [ReviewController::class, 'store'])->name('api.customer.reviews.store');
+        Route::post('/customer/reviews/update-status', [ReviewController::class, 'updateStatus'])->name('api.customer.reviews.updateStatus');
         Route::get('/customer/products/with-stock', [ProductController::class, 'getProductsWithStock'])->name('api.customer.getProductsWithStock');
     });
 
