@@ -21,8 +21,14 @@ use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
-
+// Imports
+Route::post('/import/products', [ProductController::class, 'productImport'])->name('imports.products');
+Route::post('/import/courier', [CourierController::class,'courierImport'])->name('imports.courier');
+Route::post('/import/supplier', [SupplierController::class,'supplierImport'])->name('imports.supplier');
+Route::post('/import/usermanagement', [UserManagementController::class,'userManagementImport'])->name('imports.usermanagement');
+Route::post('/import/orders', [OrderController::class,'orderImport'])->name('imports.order');
+Route::post('/import/payments', [PaymentMethodController::class,'paymentmethodImport'])->name('imports.paymentmethod');
+Route::post('/import/stock', [StocksController::class,'stockImport'])->name('imports.stock');
 
 // API Resources
 Route::apiResource('products', ProductController::class);
@@ -79,9 +85,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/{product}', [ProductController::class, 'show'])->name('api.admin.showProduct');
         Route::put('/{product}', [ProductController::class, 'update'])->name('api.admin.updateProduct');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('api.admin.deleteProduct');
-      
+
         Route::post('/updateProductStock', [ProductController::class, 'updateProductStock']);
-       
+
     });
 
     // Suppliers Routes
@@ -132,14 +138,14 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
 
 
      // Chart Routes
-    
+
 
         Route::get('/charts/total-supplier', [SupplierController::class, 'getTotalSuppliers']);
           Route::get('/charts/get-courier-per-branch', [CourierController::class, 'getCourierPerBranch'])->name('charts.GetcourierPerBranch');
           Route::get('/charts/total-role', [UserManagementController::class, 'getTotalRoles']);
     });
 
- 
+
 
 
 // Chart Routes

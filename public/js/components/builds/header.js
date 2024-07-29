@@ -14,7 +14,7 @@ window.navigate = navigate;
 
 window.renderHeader = function(user, hideComponents, role, myCartUrl) {
     const hideSearchBar = window.location.pathname === '/customer/profile';
-    let query = ''; 
+    let query = '';
     let cartHovered = false;
     const cartItems = [];
     let isLoggingOut = false;
