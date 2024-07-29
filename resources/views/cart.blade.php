@@ -30,9 +30,9 @@
                                 <button class="quantity-plus btn-quantity" data-id="{{ $cart->id }}">+</button>
                             </div>
                         </td>
-                        <td class="product-remove">
+                        <!-- <td class="product-remove">
                             <button class="btn-remove" data-id="{{ $cart->id }}">x</button>
-                        </td>
+                        </td> -->
                     </tr>
                 @endforeach
             </tbody>

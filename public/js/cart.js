@@ -101,29 +101,34 @@ $(document).ready(function () {
         });
     }
 
-    // Function to remove item from cart
-    function removeItem(productId) {
-        console.log(`Attempting to remove item with ID: ${productId}`);
-        $.ajax({
-            type: "DELETE",
-            url: `/api/removeFromCart/${productId}`,
-            contentType: "application/json",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                console.log('Remove item response:', response);
-                showCustomNotification('Item removed successfully.');
-                $(`tr[data-id="${productId}"]`).remove();
-                calculateTotal();
-                fetchCartCount();
-            },
-            error: function (xhr, status, error) {
-                console.error('Failed to remove item:', error);
-                console.error('Response:', xhr.responseText);
-            }
-        });
-    }
+    // // Function to remove item from cart
+    // function removeItem(productId) {
+    //     console.log(`Attempting to remove item with ID: ${productId}`);
+    //     $.ajax({
+    //         type: "DELETE",
+    //         url: `/api/removeFromCart/${productId}`,
+    //         contentType: "application/json",
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function (response) {
+    //             console.log('Remove item response:', response);
+    //             showCustomNotification('Item removed successfully.');
+    //             $(`tr[data-id="${productId}"]`).remove();
+    //             calculateTotal();
+    //             fetchCartCount();
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error('Failed to remove item:', error);
+    //             console.error('Response:', xhr.responseText);
+    //         }
+    //     });
+    // }
+    // // Use event delegation to handle click event on dynamically added remove buttons
+    // $(document).on('click', '.btn-remove', function () {
+    //     const productId = $(this).data('id');
+    //     removeItem(productId);
+    // });
 
     // Calculate total amount function
     function calculateTotal() {

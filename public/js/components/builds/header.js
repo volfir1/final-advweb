@@ -118,43 +118,73 @@ window.renderHeader = function(user, hideComponents, role, myCartUrl) {
     const searchClient = algoliasearch('SKGEMY1IVJ', '90477025cfd3896f776e79b8d0625bca');
     const index = searchClient.initIndex('products');
 
+    // Variables for infinite scrolling
+    let allProducts = [];
+    let currentOffset = 0;
+    const limit = 10;
+    let isLoading = false;
+
     // Load initial products (simplified)
-    function loadProducts() {
+    function loadProducts(offset, limit) {
+        const productsToLoad = allProducts.slice(offset, offset + limit);
+        $.each(productsToLoad, function (key, value) {
+            var imageUrl = value.image ? `/storage/product_images/${value.image}` : '/storage/product_images/default-placeholder.png';
+            var stock = value.stock !== undefined ? value.stock : 'Unavailable';
+
+            var item = `
+                <div class='menu-item'>
+                    <div class='item-image'>
+                        <img src='${imageUrl}' alt='${value.name}' />
+                    </div>
+                    <div class='item-details'>
+                        <h5 class='item-name'>${value.name}</h5>
+                        <p>Category: ${value.category}</p>
+                        <p class='item-price'>Price: Php <span class='price'>${value.price}</span></p>
+                        <p class='item-description'>${value.description}</p>
+                        
+                        <div class='quantity-container'>
+                            <button class='quantity-minus'>-</button>
+                            <input type='text' class='quantity' value='0' readonly>
+                            <button class='quantity-plus'>+</button>
+                        </div>
+                        <p class='itemId' hidden>${value.id}</p>
+                    </div>
+                    <button type='button' class='btn btn-buy-now add'>Add to cart</button>
+                </div>`;
+            $("#items").append(item);
+        });
+
+        // Add event listeners for the new items
+        addEventListenersToItems();
+    }
+
+    function fetchProducts() {
+        if (isLoading) return;
+        isLoading = true;
+        $('#loading').show();
+
+        setTimeout(function() { // Simulate a delay
+            loadProducts(currentOffset, limit);
+            currentOffset += limit;
+            $('#loading').hide();
+            isLoading = false;
+        }, 2000); // 2 seconds delay
+    }
+
+    function checkScroll() {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100 && !isLoading) {
+            fetchProducts();
+        }
+    }
+
+    function initializeProducts() {
         $.ajax({
             type: "GET",
             url: "/api/shop",
             dataType: 'json',
             success: function (data) {
-                $('#items').empty(); // Clear previous items
-                $.each(data, function (key, value) {
-                    var imageUrl = value.image ? `/storage/product_images/${value.image}` : '/storage/product_images/default-placeholder.png';
-                    var stock = value.stock !== undefined ? value.stock : 'Unavailable';
-
-                    var item = `
-                        <div class='menu-item'>
-                            <div class='item-image'>
-                                <img src='${imageUrl}' alt='${value.name}' />
-                            </div>
-                            <div class='item-details'>
-                                <h5 class='item-name'>${value.name}</h5>
-                                <p>Category: ${value.category}</p>
-                                <p class='item-price'>Price: Php <span class='price'>${value.price}</span></p>
-                                <p class='item-description'>${value.description}</p>
-                                <p>Stock: ${stock}</p>
-                                <div class='quantity-container'>
-                                    <button class='quantity-minus'>-</button>
-                                    <input type='text' class='quantity' value='0' readonly>
-                                    <button class='quantity-plus'>+</button>
-                                </div>
-                                <p class='itemId' hidden>${value.id}</p>
-                            </div>
-                            <button type='button' class='btn btn-buy-now add'>Add to cart</button>
-                        </div>`;
-                    $("#items").append(item);
-                });
-
-                // Add event listeners for the new items
-                addEventListenersToItems();
+                allProducts = data;
+                fetchProducts(); // Initial load
             },
             error: function () {
                 console.log('AJAX load did not work');
@@ -162,6 +192,11 @@ window.renderHeader = function(user, hideComponents, role, myCartUrl) {
             }
         });
     }
+
+    $(window).on('scroll', checkScroll);
+
+    // Initial load of products
+    initializeProducts();
 
     function addEventListenersToItems() {
         $('.quantity-plus').off('click').on('click', function () {
@@ -222,7 +257,7 @@ window.renderHeader = function(user, hideComponents, role, myCartUrl) {
         if (query) {
             performSearch(query);
         } else {
-            loadProducts(); // Load initial products if search query is empty
+            loadProducts(0, limit); // Load initial products if search query is empty
         }
     });
 
@@ -263,9 +298,6 @@ window.renderHeader = function(user, hideComponents, role, myCartUrl) {
             console.error(err);
         });
     }
-
-    // Initial load of products
-    loadProducts();
 };
 
 // Fetch user profile and initialize the app

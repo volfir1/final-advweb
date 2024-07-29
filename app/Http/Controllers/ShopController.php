@@ -150,71 +150,17 @@ public function index()
 
         return response()->json(['message' => 'Item not found in cart!'], 404);
     }
-    public function removeFromCart(Request $request)
-    {
-        $user = Auth::user();
-        $customer = $user->customer;
-        $product_id = $request->input('product_id');
-
-        $customer->products()->detach($product_id);
-
-        return response()->json(['message' => 'Successfully removed from cart!']);
-    }
-    // public function checkout(Request $request)
+    // public function removeFromCart(Request $request)
     // {
     //     $user = Auth::user();
-    //     $customerId = $user->customer->id;
+    //     $customer = $user->customer;
+    //     $product_id = $request->input('product_id');
 
-    //     try {
-    //         DB::beginTransaction();
+    //     $customer->products()->detach($product_id);
 
-    //         $order = new Order();
-    //         $order->customer_id = $customerId;
-    //         $order->status = 'Processing';
-    //         $order->payment_id = $request->payment_method; // Assuming payment_method is correct
-    //         $order->courier_id = $request->courier_id;
-    //         $order->save();
-
-    //         $cartItems = DB::table('carts')
-    //             ->where('customer_id', $customerId)
-    //             ->get();
-
-    //         foreach ($cartItems as $cartItem) {
-    //             $product = Product::findOrFail($cartItem->product_id);
-
-    //             $stock = $product->stocks()->firstOrFail(); // Assuming you find the correct stock here
-    //             if ($stock->quantity < $cartItem->quantity) {
-    //                 throw new \Exception('Not enough stock for this product: ' . $product->id);
-    //             }
-
-    //             // Create order_product entry
-    //             $order->products()->attach($product->id, [
-    //                 'quantity' => $cartItem->quantity,
-    //                 'order_id' => $order->id,
-    //             ]);
-
-    //             // Update stock quantity
-    //             $stock->quantity -= $cartItem->quantity;
-    //             $stock->save();
-    //         }
-
-    //         DB::commit();
-
-    //         return response()->json([
-    //             'status' => 'Order Success',
-    //             'code' => 200,
-    //             'orderId' => $order->id,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         DB::rollback();
-    //         Log::error('Checkout error: ' . $e->getMessage());
-    //         return response()->json([
-    //             'status' => 'Order Failed',
-    //             'code' => 500,
-    //             'error' => $e->getMessage(),
-    //         ]);
-    //     }
+    //     return response()->json(['message' => 'Successfully removed from cart!']);
     // }
+    
 
     public function checkout(Request $request)
     {
@@ -279,12 +225,7 @@ public function index()
  
 
 
-    // return response()->json([
-    //     'status' => 'Order failed',
-    //     'code' => 409,
-    //     'error' => 'An error occurred during checkout. Please try again later.',
-    // ], 409);
-
+    
     /**
      * Store a newly created resource in storage.
      */

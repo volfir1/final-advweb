@@ -7,17 +7,17 @@ $(document).ready(function () {
     const index = searchClient.initIndex('products');
 
     //YUNG PRODUCT NASA HEADER.JS HEHE Yun yung gumagana hehe sorry
-    function loadProducts() {
+    function loadProducts(offset, limit = 10) {
         $.ajax({
             type: "GET",
             url: "/api/shop",
+            data: { offset: offset, limit: limit },
             dataType: 'json',
             success: function (data) {
-                $('#items').empty(); // Clear previous items
                 $.each(data, function (key, value) {
                     var imageUrl = value.image ? `/storage/product_images/${value.image}` : '/storage/product_images/default-placeholder.png';
                     var stock = value.stock !== undefined ? value.stock : 'Unavailable';
-
+    
                     var item = `
                         <div class='menu-item'>
                             <div class='item-image'>
@@ -28,7 +28,7 @@ $(document).ready(function () {
                                 <p>Category: ${value.category}</p>
                                 <p class='item-price'>Price: Php <span class='price'>${value.price}</span></p>
                                 <p class='item-description'>${value.description}</p>
-                                <p>Stock: ${stock}</p>
+                                
                                 <div class='quantity-container'>
                                     <button class='quantity-minus'>-</button>
                                     <input type='text' class='quantity' value='0' readonly>
@@ -40,7 +40,7 @@ $(document).ready(function () {
                         </div>`;
                     $("#items").append(item);
                 });
-
+    
                 // Add event listeners for the new items
                 addEventListenersToItems();
             },
@@ -50,6 +50,7 @@ $(document).ready(function () {
             }
         });
     }
+    
 
     // Function to add event listeners to items
     function addEventListenersToItems() {
