@@ -99,9 +99,16 @@
                             <div class="mb-3">
                                 <label class="form-label">Category</label>
                                 <select name="category" id="category" class="form-control" required>
-                                    <option value="">Select Category</option>
-                                    <option value="Cake">Cake</option>
-                                    <option value="Pastries">Pastries</option>
+                                <option value="">Select Category</option>
+                                <option value="Cake">Cake</option>
+                                <option value="Pastry">Pastry</option>
+                                <option value="Bread">Bread</option>
+                                <option value="Cookies">Cookies</option>
+                                <option value="Cupcakes">Cupcakes</option>
+                                <option value="Pies">Pies</option>
+                                <option value="Brownies">Brownies</option>
+                                <option value="Tarts">Tarts</option>
+                                <option value="Muffins">Muffins</option>
                                     <!-- Add more categories as needed -->
                                 </select>
                                 <span id="category_error" class="text-danger"></span>
